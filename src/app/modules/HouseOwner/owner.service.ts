@@ -74,10 +74,28 @@ const createHouse = async (NewHouse: IHouse): Promise<IHouse> =>{
       return createdHouse;
 }
 
-  export const HouseService = {
+const updateSingleHouse = async (
+    id: string,
+    payload: Partial<IHouse>
+  ): Promise<IHouse | null> => {
+    const result = await House.findOneAndUpdate({ _id: id }, payload, {
+      new: true,
+    });
+    return result;
+  };
 
+
+  const deleteHouse = async (id: string): Promise<IHouse | null> => {
+    const result = await House.findOneAndDelete({ _id: id });
+    return result;
+  };
+  
+
+  export const HouseService = {
+    updateSingleHouse,
     getAllHouses,
     getOwnedHouse,
-    createHouse
+    createHouse,
+    deleteHouse
   };
   

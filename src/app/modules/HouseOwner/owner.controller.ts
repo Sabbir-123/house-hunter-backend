@@ -77,8 +77,35 @@ const addHouse = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+
+const updateHouse = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = await HouseService.updateSingleHouse(id, updatedData);
+    sendResponse<IHouse>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "House Updated Successfully",
+      data: result,
+    });
+  });
+
+  const deleteSingleHouse = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await HouseService.deleteHouse(id);
+    sendResponse<IHouse>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "House Deleted Successfully",
+      data: result,
+    });
+  });
+
+
 export const HouseController = {
 	getAllHouses,
 	getOwnedHouse,
 	addHouse,
+    updateHouse,
+    deleteSingleHouse
 };
