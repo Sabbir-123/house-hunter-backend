@@ -16,3 +16,9 @@ export const HouseHunterHouseSearchableFields = [
     "rent_per_month"
   ];
   
+
+  export enum Label {
+    ForRent = "for rent",
+    Rented = "rented",
+  }
+  

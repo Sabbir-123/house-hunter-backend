@@ -1,11 +1,12 @@
 import  { Schema, model } from "mongoose";
 import { HouseModel, IHouse } from "./owner.interface";
+import { Label } from "./Owner.constant";
 
 const houseSchema = new Schema<IHouse, Record<string, never>>(
 	{
 		owner: {
 			type: Schema.Types.ObjectId,
-			ref: "Owner",
+			ref: "User",
 			required: true,
 		},
 		name: {
@@ -28,6 +29,11 @@ const houseSchema = new Schema<IHouse, Record<string, never>>(
 			type: Number,
 			required: true,
 		},
+        label: {
+            type: String,
+            enum: Label,
+            default: Label.ForRent,
+          },
 		room_size: {
 			type: Number,
 			required: true,

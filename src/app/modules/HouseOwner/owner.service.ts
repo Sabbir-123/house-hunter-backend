@@ -67,7 +67,7 @@ const getOwnedHouse = async (id: string): Promise<IHouse[] | null> =>{
 
 
 const createHouse = async (NewHouse: IHouse): Promise<IHouse> =>{
-    const createdHouse = await House.create(NewHouse)
+    const createdHouse = await (await (House.create(NewHouse))).populate('owner')
     if (!createdHouse) {
         throw new ApiError("Failed to create House", 400);
       }

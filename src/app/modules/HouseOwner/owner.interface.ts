@@ -1,5 +1,6 @@
 import { Model, Types } from "mongoose";
 import { IUser } from "../users/user.interface";
+import { Label } from "./Owner.constant";
 
 export type IHouse ={
     owner?: Types.ObjectId | IUser | undefined | null; 
@@ -10,6 +11,7 @@ export type IHouse ={
     bathrooms: number;
     room_size: number;
     picture: string;
+    label: Label;
     availability_date: Date;
     rent_per_month: number;
     phone_number: string;

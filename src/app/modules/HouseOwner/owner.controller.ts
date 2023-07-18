@@ -48,6 +48,7 @@ const addHouse = catchAsync(async (req: Request, res: Response) => {
 		rent_per_month,
 		phone_number,
 		description,
+        label
 	} = req.body;
 
 	// Create a new House object
@@ -56,6 +57,7 @@ const addHouse = catchAsync(async (req: Request, res: Response) => {
 		owner,
 		address,
 		city,
+        label,
 		bedrooms,
 		bathrooms,
 		room_size,
