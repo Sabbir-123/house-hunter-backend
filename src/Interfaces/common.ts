@@ -25,7 +25,7 @@ export type IGenericResponse<T> = {
 
 
 export type ILoginUser = {
-  phoneNumber: string;
+  email: string;
   password: string;
   role: string;
 };

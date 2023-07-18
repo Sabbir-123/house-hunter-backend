@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from "mongoose";
-import { IUser, IUserMethods, UserModel } from "./user.interface";
+import { IUser, IUserMethods, ROLE_BASED, UserModel } from "./user.interface";
 import bcrypt from "bcrypt";
 import config from "../../../config";
-// import ApiError from "../../../error/ApiError";
-// import httpStatus from "http-status";
+
 
 const userSchema = new Schema<IUser, Record<string, never>, IUserMethods>(
   {
@@ -20,6 +19,7 @@ const userSchema = new Schema<IUser, Record<string, never>, IUserMethods>(
     role: {
       type: String,
       required: true,
+      enum: Object.values(ROLE_BASED),
     },
     name: {
       type: String,
@@ -33,26 +33,27 @@ const userSchema = new Schema<IUser, Record<string, never>, IUserMethods>(
     email: {
       type: String,
       required: true,
+      unique: true,
     }
   },
   {
     timestamps: true,
     toJSON: {
       virtuals: true,
-      transform: function (doc, ret) {
-        delete ret["password"];
-        return ret;
-      },
+      // transform: function (doc, ret) {
+      //   delete ret["password"];
+      //   return ret;
+      // },
     },
   }
 );
 
 userSchema.methods.isUserExist = async function (
-  phoneNumber: string
+  email: string
 ): Promise<Partial<IUser> | null> {
   const user = await User.findOne(
-    { phoneNumber },
-    { phoneNumber: 1, password: 1, role: 1 }
+    { email },
+    { email: 1, password: 1, role: 1 }
   );
   return user;
 };

@@ -1,11 +1,14 @@
 import { Model } from "mongoose";
 
-
+export enum ROLE_BASED {
+  OWNER = "owner",
+  RENTER = "renter",
+}
 
 export type IUser = {
   id: string;
   password: string;
-  role: string;
+  role: ROLE_BASED;
   name: string;
   phoneNumber: string;
   email: string;
@@ -21,6 +24,6 @@ export type IUserMethods = {
 
 export type UserModel = Model<IUser, Record<string, unknown>, IUserMethods>;
 
-export type ICowHutFilter = {
+export type IHouseHunterFilter = {
   searchTerm?: string;
 };

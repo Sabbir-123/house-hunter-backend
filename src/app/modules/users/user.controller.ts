@@ -17,6 +17,7 @@ const creatrUser = catchAsync(async (req: Request, res: Response) => {
 
   // Generate user ID based on the role
   const userId = await generateUseId(user.role);
+  console.log(userId)
 
   // Create a new user object with the generated ID
   const newUser = {
@@ -25,13 +26,13 @@ const creatrUser = catchAsync(async (req: Request, res: Response) => {
     role: user.role,
     name: user.name,
     phoneNumber: user.phoneNumber,
-    email: user.address,
+    email: user.email,
     
   };
 
   // Call the UserService createUser function with the new user object
   const result = await UserService.createUser(newUser);
-
+console.log(result)
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -139,20 +140,7 @@ const myProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const myUpdateProfile = catchAsync(async (req: Request, res: Response) => {
-  const accessToken = req.headers.authorization?.split(" ")[0]; // Assuming the access token is provided in the "Authorization" header
-  const updatedData = req.body;
-  const result = await UserService.myUpdateProfile(
-    accessToken as string,
-    updatedData
-  );
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "User's information Updated successfully",
-    data: result,
-  });
-});
+
 
 export const UserController = {
   creatrUser,
@@ -163,5 +151,5 @@ export const UserController = {
   loginUser,
   refreshToken,
   myProfile,
-  myUpdateProfile,
+
 };

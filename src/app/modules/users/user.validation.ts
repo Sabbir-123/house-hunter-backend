@@ -6,23 +6,18 @@ const createUserZodSchema = z.object({
       role: z.string({
         required_error: "Role is required",
       }),
-      password: z.string().optional(),
-      name: z.object({
-        firstName: z.string({
-          required_error: "First name is required",
-        }),
-        lastName: z.string({
-          required_error: "Last name is required",
-        }),
+      password: z.string({
+        required_error: "Password is required",
+      }),
+      name: z.string({
+        required_error: "First name is required",
       }),
       phoneNumber: z.string({
         required_error: "Phone number is required",
       }),
-      address: z.string({
-        required_error: "Address is required",
+      email: z.string({
+        required_error: "Email is required",
       }),
-      budget: z.string().optional(),
-      income: z.string().optional(),
     }),
   }),
 });
@@ -36,38 +31,27 @@ const updateCowHutUserZodSchema = z.object({
       .optional(),
     password: z.string().optional(),
     name: z
-      .object({
-        firstName: z
-          .string({
-            required_error: "First name is required",
-          })
-          .optional(),
-        lastName: z
-          .string({
-            required_error: "Last name is required",
-          })
-          .optional(),
-      })
-      .optional(),
+    .string({
+      required_error: "Full Name is required",
+    })
+    .optional(),
     phoneNumber: z
       .string({
         required_error: "Phone number is required",
       })
       .optional(),
-    address: z
+    email: z
       .string({
-        required_error: "Address is required",
+        required_error: "Email is required",
       })
-      .optional(),
-    budget: z.string().optional(),
-    income: z.string().optional(),
+      .optional()
   }),
 });
 
 const loginZodSchema = z.object({
   body: z.object({
-    phoneNumber: z.string({
-      required_error: "phoneNumber is required",
+    email: z.string({
+      required_error: "email is required",
     }),
     password: z.string({
       required_error: "Password is required",
