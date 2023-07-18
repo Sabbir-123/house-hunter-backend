@@ -3,6 +3,7 @@ import { IHouse } from "../HouseOwner/owner.interface";
 
 export type IBookings ={
     house: Types.ObjectId | IHouse | undefined | null; 
+    renter: Types.ObjectId | IHouse | undefined | null; 
     name: string;
     email: string;
     phone_number: string;

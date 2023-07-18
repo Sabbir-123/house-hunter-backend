@@ -7,7 +7,7 @@ const bookingSchema = new Schema<IBookings, Record<string, never>>(
 	{
 		house: {
 			type: Schema.Types.ObjectId,
-			
+			ref: "house",
 			required: true,
 		},
 		name: {
