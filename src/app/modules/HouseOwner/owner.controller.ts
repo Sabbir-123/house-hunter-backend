@@ -22,6 +22,7 @@ const getAllHouses = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+//
 
 const getOwnedHouse = catchAsync(async (req: Request, res: Response) => {
 	const email = req.params.email as string;
