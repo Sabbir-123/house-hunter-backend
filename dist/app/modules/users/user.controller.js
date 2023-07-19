@@ -29,10 +29,7 @@ const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const user_service_1 = require("./user.service");
 const user_util_1 = require("./user.util");
-const pick_1 = __importDefault(require("../../../shared/pick"));
-const Paginationconstants_1 = require("../../../constants/Paginationconstants");
 const config_1 = __importDefault(require("../../../config"));
-const user_constant_1 = require("./user.constant");
 const creatrUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { user } = req.body;
     // Generate user ID based on the role
@@ -90,68 +87,20 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
-const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const isOwner = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // searching, filtering and pagination
-    const filters = (0, pick_1.default)(req === null || req === void 0 ? void 0 : req.query, user_constant_1.HouseHunterUserFilterableFields);
-    const paginationOptions = (0, pick_1.default)(req === null || req === void 0 ? void 0 : req.query, Paginationconstants_1.paginationFields);
-    const result = yield user_service_1.UserService.getAllUsers(filters, paginationOptions);
+    const email = req.params.email;
+    const result = yield user_service_1.UserService.isOwner(email);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: "Users retrieved Successfully",
-        meta: result.meta,
-        data: result.data,
-    });
-}));
-const getSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.id;
-    const result = yield user_service_1.UserService.getSingleUser(id);
-    (0, sendResponse_1.default)(res, {
-        success: true,
-        statusCode: http_status_1.default.OK,
-        message: "User retrieved Successfully",
-        data: result,
-    });
-}));
-const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.id;
-    const updatedData = req.body;
-    const result = yield user_service_1.UserService.updateSingleUser(id, updatedData);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "User Updated Successfully",
-        data: result,
-    });
-}));
-const deleteSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.id;
-    const result = yield user_service_1.UserService.deleteUser(id);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "User Deleted Successfully",
-        data: result,
-    });
-}));
-const myProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const accessToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[0]; // Assuming the access token is provided in the "Authorization" header
-    const result = yield user_service_1.UserService.myProfile(accessToken);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "User's information retrieved successfully",
+        message: "Owner retrieved Successfully",
         data: result,
     });
 }));
 exports.UserController = {
     creatrUser,
-    getAllUsers,
-    getSingleUser,
-    updateUser,
-    deleteSingleUser,
+    isOwner,
     loginUser,
     refreshToken,
-    myProfile,
 };

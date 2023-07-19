@@ -8,17 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const index_1 = __importDefault(require("../../../config/index"));
 const ApiError_1 = __importDefault(require("../../../error/ApiError"));
-const paginationHelpers_1 = require("../../../helpers/paginationHelpers");
-const user_constant_1 = require("./user.constant");
 const user_model_1 = require("./user.model");
 const user_util_1 = require("./user.util");
 const http_status_1 = __importDefault(require("http-status"));
@@ -42,63 +29,12 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return createdUser;
 });
-const getAllUsers = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
-    //filtering and searching
-    const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
-    const andCondition = [];
-    // dynamically searching
-    if (searchTerm) {
-        andCondition.push({
-            $or: user_constant_1.HouseHunterSearchableFields.map((field) => ({
-                [field]: {
-                    $regex: searchTerm,
-                    $options: "i",
-                },
-            })),
-        });
+const isOwner = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findOne({ email });
+    if (!user) {
+        throw new ApiError_1.default("User not found", http_status_1.default.NOT_FOUND);
     }
-    // dynamically filtering
-    if (Object.keys(filtersData).length) {
-        andCondition.push({
-            $and: Object.entries(filtersData).map(([field, value]) => ({
-                [field]: value,
-            })),
-        });
-    }
-    const { page, limit, skip, sortBy, sortOrder } = paginationHelpers_1.paginationHelpers.calculatePagination(paginationOptions);
-    const sortConditions = {};
-    if (sortBy && sortOrder) {
-        sortConditions[sortBy] = sortOrder;
-    }
-    const whereCondition = andCondition.length > 0 ? { $and: andCondition } : {};
-    const result = yield user_model_1.User.find(whereCondition)
-        .sort(sortConditions)
-        .skip(skip)
-        .limit(limit);
-    const total = yield user_model_1.User.countDocuments();
-    return {
-        meta: {
-            page,
-            limit,
-            total,
-        },
-        data: result,
-    };
-});
-// single user
-const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findById(id);
-    return result;
-});
-const updateSingleUser = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findOneAndUpdate({ _id: id }, payload, {
-        new: true,
-    });
-    return result;
-});
-const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findOneAndDelete({ _id: id });
-    return result;
+    return user.role === "owner";
 });
 //login
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -145,26 +81,9 @@ const refreshTokenService = (token) => __awaiter(void 0, void 0, void 0, functio
         accessToken: newAccessToken,
     };
 });
-const myProfile = (accessToken) => __awaiter(void 0, void 0, void 0, function* () {
-    if (accessToken) {
-        const decodedToken = jwtHelpers_1.jwtHelpers.decodeToken(accessToken);
-        const { userPhoneNumber } = decodedToken;
-        const user = yield user_model_1.User.findOne({ phoneNumber: userPhoneNumber })
-            .select("name phoneNumber address")
-            .lean();
-        if (!user) {
-            throw new ApiError_1.default("User not found", http_status_1.default.NOT_FOUND);
-        }
-        return user;
-    }
-});
 exports.UserService = {
     createUser,
-    getAllUsers,
-    getSingleUser,
-    updateSingleUser,
-    deleteUser,
+    isOwner,
     loginUser,
-    refreshTokenService,
-    myProfile,
+    refreshTokenService
 };

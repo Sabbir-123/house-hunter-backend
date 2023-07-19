@@ -6,7 +6,7 @@ import { RenterController } from "./Renter.controller";
 
 const router = express.Router();
 
-router.get("/bookings/:email", RenterController.getAllBookings);
+router.get("/bookings/:number", RenterController.getAllBookings);
 router.post("/booking-house",
 
  RenterController.createBooking);
