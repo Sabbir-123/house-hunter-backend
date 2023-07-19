@@ -24,23 +24,7 @@ router.post(
   UserController.refreshToken
 );
 
-router.get("/users",  UserController.getAllUsers);
-router.get("/users/my-profile", UserController.myProfile);
-router.patch(
-  "/users/:id",
-  
-  validateRequest(UserValidation?.updateCowHutUserZodSchema),
-  UserController.updateUser
-);
-router.delete(
-  "/users/:id",
-  
-  UserController.deleteSingleUser
-);
-router.get(
-  "/users/:id",
-  
-  UserController.getSingleUser
-);
+router.get("/email/:email",  UserController.isOwner);
+
 
 export const UserRoutes = router;

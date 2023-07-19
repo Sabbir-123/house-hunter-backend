@@ -1,17 +1,16 @@
-import { SortOrder } from "mongoose";
+
 import {
-	IGenericResponse,
+
 	ILoginUser,
 	ILoginUserResponse,
 	IRefreshTokenResponse,
-	IpaginationOptions,
+
 } from "../../../Interfaces/common";
 import config from "../../../config/index";
 import ApiError from "../../../error/ApiError";
-import { paginationHelpers } from "../../../helpers/paginationHelpers";
-import { HouseHunterSearchableFields } from "./user.constant";
 
-import { IHouseHunterFilter, IUser } from "./user.interface";
+
+import {  IUser } from "./user.interface";
 import { User } from "./user.model";
 import { generateUseId } from "./user.util";
 
@@ -30,77 +29,15 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
 	}
 	return createdUser;
 };
-
-const getAllUsers = async (
-	filters: IHouseHunterFilter,
-	paginationOptions: IpaginationOptions,
-): Promise<IGenericResponse<IUser[]>> => {
-	//filtering and searching
-	const { searchTerm, ...filtersData } = filters;
-	const andCondition = [];
-	// dynamically searching
-	if (searchTerm) {
-		andCondition.push({
-			$or: HouseHunterSearchableFields.map((field) => ({
-				[field]: {
-					$regex: searchTerm,
-					$options: "i",
-				},
-			})),
-		});
+const isOwner = async (email: string): Promise<boolean> => {
+	const user = await User.findOne({ email });
+	if (!user) {
+	  throw new ApiError("User not found", httpStatus.NOT_FOUND);
 	}
-	// dynamically filtering
-	if (Object.keys(filtersData).length) {
-		andCondition.push({
-			$and: Object.entries(filtersData).map(([field, value]) => ({
-				[field]: value,
-			})),
-		});
-	}
+	return user.role === "owner";
+  };
 
-	const { page, limit, skip, sortBy, sortOrder } =
-		paginationHelpers.calculatePagination(paginationOptions);
-	const sortConditions: { [key: string]: SortOrder } = {};
-	if (sortBy && sortOrder) {
-		sortConditions[sortBy] = sortOrder;
-	}
 
-	const whereCondition = andCondition.length > 0 ? { $and: andCondition } : {};
-	const result = await User.find(whereCondition)
-		.sort(sortConditions)
-		.skip(skip)
-		.limit(limit);
-	const total = await User.countDocuments();
-	return {
-		meta: {
-			page,
-			limit,
-			total,
-		},
-		data: result,
-	};
-};
-
-// single user
-const getSingleUser = async (id: string): Promise<IUser | null> => {
-	const result = await User.findById(id);
-	return result;
-};
-
-const updateSingleUser = async (
-	id: string,
-	payload: Partial<IUser>,
-): Promise<IUser | null> => {
-	const result = await User.findOneAndUpdate({ _id: id }, payload, {
-		new: true,
-	});
-	return result;
-};
-
-const deleteUser = async (id: string): Promise<IUser | null> => {
-	const result = await User.findOneAndDelete({ _id: id });
-	return result;
-};
 //login
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
 	const { email, password } = payload;
@@ -173,30 +110,11 @@ const refreshTokenService = async (
 	};
 };
 
-const myProfile = async (
-	accessToken: string,
-): Promise<Partial<IUser> | null | undefined> => {
-	if (accessToken) {
-		const decodedToken = jwtHelpers.decodeToken(accessToken);
-		const { userPhoneNumber } = decodedToken;
-		const user = await User.findOne({ phoneNumber: userPhoneNumber })
-			.select("name phoneNumber address")
-			.lean();
 
-		if (!user) {
-			throw new ApiError("User not found", httpStatus.NOT_FOUND);
-		}
-		return user;
-	}
-};
 
 export const UserService = {
 	createUser,
-	getAllUsers,
-	getSingleUser,
-	updateSingleUser,
-	deleteUser,
+	isOwner,
 	loginUser,
-	refreshTokenService,
-	myProfile,
+	refreshTokenService
 };
