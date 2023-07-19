@@ -4,11 +4,6 @@ exports.House = void 0;
 const mongoose_1 = require("mongoose");
 const Owner_constant_1 = require("./Owner.constant");
 const houseSchema = new mongoose_1.Schema({
-    owner: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    },
     name: {
         type: String,
         required: true,
@@ -18,6 +13,10 @@ const houseSchema = new mongoose_1.Schema({
         required: true,
     },
     city: {
+        type: String,
+        required: true,
+    },
+    email: {
         type: String,
         required: true,
     },

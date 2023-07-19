@@ -70,12 +70,12 @@ const getAllHouses = (filters, paginationOptions) => __awaiter(void 0, void 0, v
         data: result,
     };
 });
-const getOwnedHouse = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const house = yield owner_model_1.House.find({ owner: id });
-    return house;
+const getOwnedHouse = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const houses = yield owner_model_1.House.find({ email: email });
+    return houses;
 });
 const createHouse = (NewHouse) => __awaiter(void 0, void 0, void 0, function* () {
-    const createdHouse = yield (yield (owner_model_1.House.create(NewHouse))).populate('owner');
+    const createdHouse = yield owner_model_1.House.create(NewHouse);
     if (!createdHouse) {
         throw new ApiError_1.default("Failed to create House", 400);
     }

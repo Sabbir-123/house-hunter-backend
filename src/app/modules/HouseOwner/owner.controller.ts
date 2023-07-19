@@ -22,17 +22,39 @@ const getAllHouses = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+
 const getOwnedHouse = catchAsync(async (req: Request, res: Response) => {
-	console.log(req.params.id);
-	const result = await HouseService.getOwnedHouse(req.params.id);
-	console.log(result);
-	sendResponse<IHouse[]>(res, {
+	const email = req.params.email as string;
+  console.log(email)
+	if (!email) {
+	  return sendResponse(res, {
+		success: false,
+		statusCode: httpStatus.BAD_REQUEST,
+		message: "Email parameter is missing",
+		data: null,
+	  });
+	}
+  
+	try {
+	  const result = await HouseService.getOwnedHouse(email);
+	  console.log(result);
+	  sendResponse(res, {
 		success: true,
 		statusCode: httpStatus.OK,
-		message: "Owner's Houses retrieved Successfully",
+		message: "Owner's Houses retrieved successfully",
 		data: result,
-	});
-});
+	  });
+	} catch (error) {
+	  console.error(error);
+	  sendResponse(res, {
+		success: false,
+		statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+		message: "An error occurred",
+		data: null,
+	  });
+	}
+  });
+  
 
 const addHouse = catchAsync(async (req: Request, res: Response) => {
 	const {
@@ -48,6 +70,7 @@ const addHouse = catchAsync(async (req: Request, res: Response) => {
 		rent_per_month,
 		phone_number,
 		description,
+		email,
         label
 	} = req.body;
 
@@ -59,6 +82,7 @@ const addHouse = catchAsync(async (req: Request, res: Response) => {
 		city,
         label,
 		bedrooms,
+		email,
 		bathrooms,
 		room_size,
 		picture,

@@ -34,18 +34,38 @@ const getAllHouses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const getOwnedHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.params.id);
-    const result = yield owner_service_1.HouseService.getOwnedHouse(req.params.id);
-    console.log(result);
-    (0, sendResponse_1.default)(res, {
-        success: true,
-        statusCode: http_status_1.default.OK,
-        message: "Owner's Houses retrieved Successfully",
-        data: result,
-    });
+    const email = req.params.email;
+    console.log(email);
+    if (!email) {
+        return (0, sendResponse_1.default)(res, {
+            success: false,
+            statusCode: http_status_1.default.BAD_REQUEST,
+            message: "Email parameter is missing",
+            data: null,
+        });
+    }
+    try {
+        const result = yield owner_service_1.HouseService.getOwnedHouse(email);
+        console.log(result);
+        (0, sendResponse_1.default)(res, {
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: "Owner's Houses retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        (0, sendResponse_1.default)(res, {
+            success: false,
+            statusCode: http_status_1.default.INTERNAL_SERVER_ERROR,
+            message: "An error occurred",
+            data: null,
+        });
+    }
 }));
 const addHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, owner, address, city, bedrooms, bathrooms, room_size, picture, availability_date, rent_per_month, phone_number, description, label } = req.body;
+    const { name, owner, address, city, bedrooms, bathrooms, room_size, picture, availability_date, rent_per_month, phone_number, description, email, label } = req.body;
     // Create a new House object
     const newHouse = {
         name,
@@ -54,6 +74,7 @@ const addHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
         city,
         label,
         bedrooms,
+        email,
         bathrooms,
         room_size,
         picture,

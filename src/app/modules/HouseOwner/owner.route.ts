@@ -22,7 +22,7 @@ router.delete(
   HouseController.deleteSingleHouse
 );
 router.get(
-  "/ownedHouse/:id",
+  "/ownedHouse/:email",
 
   HouseController.getOwnedHouse
 );

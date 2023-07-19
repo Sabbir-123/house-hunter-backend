@@ -50,9 +50,9 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         !(yield user.isPasswordMatched(password, isUserExist.password))) {
         throw new ApiError_1.default("Password is incorrect", http_status_1.default.UNAUTHORIZED);
     }
-    const { phoneNumber: userPhoneNumber, role, email: userEmail } = isUserExist;
-    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ userPhoneNumber, role, userEmail }, index_1.default.jwt.secret, index_1.default.jwt.access_expires_in);
-    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ userPhoneNumber, role, userEmail }, index_1.default.jwt.refresh_secret, index_1.default.jwt.refresh_expires_in);
+    const { phoneNumber: userPhoneNumber, role, email: userEmail, id: userId } = isUserExist;
+    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ userPhoneNumber, role, userEmail, userId }, index_1.default.jwt.secret, index_1.default.jwt.access_expires_in);
+    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ userPhoneNumber, role, userEmail, userId }, index_1.default.jwt.refresh_secret, index_1.default.jwt.refresh_expires_in);
     return {
         accessToken,
         refreshToken,

@@ -1,10 +1,11 @@
-import { Model, Types } from "mongoose";
-import { IUser } from "../users/user.interface";
+import { Model } from "mongoose";
+
 import { Label } from "./Owner.constant";
 
 export type IHouse ={
-    owner?: Types.ObjectId | IUser | undefined | null; 
+ 
     name: string;
+    email?:string;
     address: string;
     city: string;
     bedrooms: number;

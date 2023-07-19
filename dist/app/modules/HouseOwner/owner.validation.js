@@ -4,7 +4,6 @@ exports.OwnerValidation = void 0;
 const zod_1 = require("zod");
 const CreateHouseZodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        owner: zod_1.z.string().optional(),
         name: zod_1.z.string({
             required_error: "Name is required",
         }),

@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const CreateHouseZodSchema = z.object({
   body: z.object({
-    owner: z.string().optional(),
     name: z.string({
       required_error: "Name is required",
     }),

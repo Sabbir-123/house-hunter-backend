@@ -4,11 +4,7 @@ import { Label } from "./Owner.constant";
 
 const houseSchema = new Schema<IHouse, Record<string, never>>(
 	{
-		owner: {
-			type: Schema.Types.ObjectId,
-			ref: "User",
-			required: true,
-		},
+		
 		name: {
 			type: String,
 			required: true,
@@ -18,6 +14,10 @@ const houseSchema = new Schema<IHouse, Record<string, never>>(
 			required: true,
 		},
 		city: {
+			type: String,
+			required: true,
+		},
+		email: {
 			type: String,
 			required: true,
 		},
