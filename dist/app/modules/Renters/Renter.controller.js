@@ -28,7 +28,6 @@ const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const Renter_service_1 = require("./Renter.service");
-const jwtHelpers_1 = require("../../../helpers/jwtHelpers");
 const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = __rest(req.body, []);
     const order = yield Renter_service_1.BookingService.createOrder(userData);
@@ -40,21 +39,15 @@ const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getAllBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const accessToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[0]; // Fixed the split index to retrieve the token
+    const phoneNumber = req.query.phoneNumber;
     let result = [];
-    if (accessToken) {
-        const decodedToken = jwtHelpers_1.jwtHelpers.decodeToken(accessToken); // Decode the access token
-        const { userPhoneNumber } = decodedToken;
-        console.log(decodedToken);
-        result = yield Renter_service_1.BookingService.getAllBookings(userPhoneNumber);
-        (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
-            success: true,
-            message: "Bookings retrieved successfully!",
-            data: result,
-        });
-    }
+    result = yield Renter_service_1.BookingService.getAllBookings(phoneNumber);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "Bookings retrieved successfully!",
+        data: result,
+    });
 }));
 const deleteSingleBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
@@ -70,5 +63,5 @@ const deleteSingleBooking = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 exports.RenterController = {
     createBooking,
     getAllBookings,
-    deleteSingleBooking
+    deleteSingleBooking,
 };

@@ -92,6 +92,16 @@ const updateHouse = catchAsync(async (req: Request, res: Response) => {
     });
   });
 
+  const getSingleHouse = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await HouseService.getSingleHouse(id);
+    sendResponse<IHouse>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "House Retreived Successfully",
+      data: result,
+    });
+  });
   const deleteSingleHouse = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
     const result = await HouseService.deleteHouse(id);
@@ -109,5 +119,6 @@ export const HouseController = {
 	getOwnedHouse,
 	addHouse,
     updateHouse,
-    deleteSingleHouse
+    deleteSingleHouse,
+    getSingleHouse
 };

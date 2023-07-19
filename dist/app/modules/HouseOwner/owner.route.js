@@ -14,4 +14,5 @@ router.post("/ownedHouses", (0, validateRequest_1.default)(owner_validation_1.Ow
 router.patch("/ownedSingleHouse/:id", (0, validateRequest_1.default)(owner_validation_1.OwnerValidation === null || owner_validation_1.OwnerValidation === void 0 ? void 0 : owner_validation_1.OwnerValidation.UpdateHouseZodSchema), owner_controller_1.HouseController.updateHouse);
 router.delete("/ownedSingleHouse/:id", owner_controller_1.HouseController.deleteSingleHouse);
 router.get("/ownedHouse/:id", owner_controller_1.HouseController.getOwnedHouse);
+router.get("/signleHouse/:id", owner_controller_1.HouseController.getSingleHouse);
 exports.OwnerRoutes = router;

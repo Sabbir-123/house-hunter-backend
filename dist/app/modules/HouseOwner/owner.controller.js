@@ -82,6 +82,16 @@ const updateHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getSingleHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield owner_service_1.HouseService.getSingleHouse(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "House Retreived Successfully",
+        data: result,
+    });
+}));
 const deleteSingleHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const result = yield owner_service_1.HouseService.deleteHouse(id);
@@ -97,5 +107,6 @@ exports.HouseController = {
     getOwnedHouse,
     addHouse,
     updateHouse,
-    deleteSingleHouse
+    deleteSingleHouse,
+    getSingleHouse
 };

@@ -26,5 +26,10 @@ router.get(
 
   HouseController.getOwnedHouse
 );
+router.get(
+  "/signleHouse/:id",
+
+  HouseController.getSingleHouse
+);
 
 export const OwnerRoutes = router;

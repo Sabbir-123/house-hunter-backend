@@ -4,8 +4,6 @@ import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { BookingService } from "./Renter.service";
 import { IBookings } from "./Renter.interface";
-import { jwtHelpers } from "../../../helpers/jwtHelpers";
-import { User } from "../users/user.model";
 
 const createBooking: RequestHandler = catchAsync(
 	async (req: Request, res: Response) => {

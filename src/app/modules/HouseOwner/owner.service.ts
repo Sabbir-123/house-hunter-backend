@@ -85,6 +85,11 @@ const updateSingleHouse = async (
   };
 
 
+  const getSingleHouse = async (id: string): Promise<IHouse | null> => {
+    const result = await House.findOne({ _id: id });
+    return result;
+  };
+  
   const deleteHouse = async (id: string): Promise<IHouse | null> => {
     const result = await House.findOneAndDelete({ _id: id });
     return result;
@@ -96,6 +101,7 @@ const updateSingleHouse = async (
     getAllHouses,
     getOwnedHouse,
     createHouse,
-    deleteHouse
+    deleteHouse,
+    getSingleHouse
   };
   

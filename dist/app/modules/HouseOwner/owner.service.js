@@ -87,6 +87,10 @@ const updateSingleHouse = (id, payload) => __awaiter(void 0, void 0, void 0, fun
     });
     return result;
 });
+const getSingleHouse = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield owner_model_1.House.findOne({ _id: id });
+    return result;
+});
 const deleteHouse = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield owner_model_1.House.findOneAndDelete({ _id: id });
     return result;
@@ -96,5 +100,6 @@ exports.HouseService = {
     getAllHouses,
     getOwnedHouse,
     createHouse,
-    deleteHouse
+    deleteHouse,
+    getSingleHouse
 };
